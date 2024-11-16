@@ -1,0 +1,23 @@
+{
+  "name": "resturantmanagementsytemapi",
+  "version": "1.0.0",
+  "description": "Express api",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kurenaisandip/ResturantManagementSystemAPI.git"
+  },
+  "author": "Sandip",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kurenaisandip/ResturantManagementSystemAPI/issues"
+  },
+  "homepage": "https://github.com/kurenaisandip/ResturantManagementSystemAPI#readme",
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}

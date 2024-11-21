@@ -1,6 +1,7 @@
 ﻿import express from "express";
 import cors from "cors";
-import connectDB from "./src/db.js";
+import connectDB from "./src/config/db.js";
+import UserRouter from "./src/routes/user_routes.js";
 
 const app = express();
 
@@ -22,20 +23,21 @@ const requestTime = (req, res, next) => {
     next();
 }
 
-// make this middleware global
-app.use(requestTime);
+//Routes
+app.get("/", (req, res, next) => {
+    res.json({ message: "Welcome to  apis" });
+});
+
+app.use('/api/users', UserRouter);
 
 // make this middleware local to the request
-app.get("/", requestTime, (req, res) => {
-    res.status(500).json({message: "Hello World"}); // this is method chaining
-    // res.send("Hello World");
-})
 
 
-app.get("/", (req, res) => {
-    res.status(500).json({message: "Hello World"}); // this is method chaining
-    // res.send("Hello World");
-})
+
+// app.get("/", (req, res) => {
+//     res.status(500).json({message: "Hello World"}); // this is method chaining
+//     // res.send("Hello World");
+// })
 
 // Error Handler
 app.use((err, req, res, next) => {

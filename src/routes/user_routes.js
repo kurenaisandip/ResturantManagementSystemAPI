@@ -27,8 +27,7 @@ UserRouter.post("/signup", async (req, res, next) => {
 
     console.log(result);
 
-    res.status(201).json({id: result._id});
-
+    res.status(201).json({ id: result[0].insertId });
 });
 
 UserRouter.post("/login", async (req, res, next) => {

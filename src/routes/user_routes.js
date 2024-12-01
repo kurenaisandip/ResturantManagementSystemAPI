@@ -22,8 +22,8 @@ UserRouter.post("/signup", async (req, res, next) => {
 
     console.log(name, email, phone_number, password);
 
-    const result = await db.query('INSERT INTO users (username, email, phone_number, password) VALUES (?, ?, ?,?)',
-        [name, email, phone_number, hashedPassword]);
+    const result = await db.query('INSERT INTO users (username, email, phone_number, password, role_id) VALUES (?, ?, ?,?, ?)',
+        [name, email, phone_number, hashedPassword, 2]);
 
     console.log(result);
 

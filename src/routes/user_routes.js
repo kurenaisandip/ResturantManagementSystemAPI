@@ -30,6 +30,11 @@ UserRouter.post("/signup", async (req, res, next) => {
     res.status(201).json({ id: result[0].insertId });
 });
 
+
+function generateAccessToken(username) {
+    return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '1800s' });
+}
+
 UserRouter.post("/login", async (req, res, next) => {
 
     const {email, password} = req.body;

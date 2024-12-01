@@ -34,9 +34,7 @@ UserRouter.post("/login", async (req, res, next) => {
 
     const {email, password} = req.body;
 
-    const user = await User.findOne({
-
-    });
+    const user = await db.query('SELECT 1 FROM users WHERE email = ?', [email]);
 
     if (!user){
         const error = new Error("User not found");
@@ -45,7 +43,9 @@ UserRouter.post("/login", async (req, res, next) => {
         return;
     }
 
-    const isPasswordValid = await bycypt.compareSync(password, user.password);
+    const [existingUser] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+
+    const isPasswordValid = await bycypt.compareSync(password, existingUser[0].password);
 
     if (!isPasswordValid){
         const error = new Error("Invalid password");
@@ -53,6 +53,10 @@ UserRouter.post("/login", async (req, res, next) => {
         next();
         return;
     }
+
+    res.status(200).json({message: "User logged in successfully"});
+
+
 
 });
 export default UserRouter;

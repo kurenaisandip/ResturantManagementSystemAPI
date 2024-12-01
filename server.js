@@ -33,6 +33,7 @@ app.get("/", (req, res, next) => {
 });
 
 app.use('/api/users', UserRouter);
+app.use('/api/restaurants', RestaurantRouter);
 
 // make this middleware local to the request
 

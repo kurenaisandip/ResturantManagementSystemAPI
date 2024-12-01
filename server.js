@@ -2,6 +2,7 @@
 import cors from "cors";
 import {connectDB} from "./src/config/db.js";
 import UserRouter from "./src/routes/user_routes.js";
+import dotenv from "dotenv";
 
 const app = express();
 
@@ -14,6 +15,9 @@ try {
 // Global middleware
 app.use(cors());
 app.use(express.json());
+
+dotenv.config();
+
 
 
 // Custom Middleware

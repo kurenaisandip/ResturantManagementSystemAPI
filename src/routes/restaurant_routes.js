@@ -89,4 +89,55 @@ RestaurantRouter.post("/login", async (req, res, next) => {
     res.status(200).json(token);
 });
 
+RestaurantRouter.put("/update/:id", async (req, res, next) => {
+    const id = req.params.id;
+    const {restaurant_name, email, phone_number, address, description, start_time, end_time, banner, image} = req.body;
+
+    // Validate input
+    if (!restaurant_name || !email || !phone_number || !address || !description || !start_time || !end_time || !banner || !image) {
+        return res.status(400).json({message: "All fields are required"});
+    }
+
+    // Update query
+    const updateQuery = `
+        UPDATE restaurants_users
+        SET restaurant_name = ?,
+            email           = ?,
+            address         = ?,
+            description     = ?,
+            start_time      = ?,
+            end_time        = ?,
+            banner          = ?,
+            image           = ?,
+            phone_number    = ?
+        WHERE restaurant_id = ?;
+    `;
+
+    try {
+        // Execute the update query
+        const [result] = await db.query(updateQuery, [restaurant_name, email, address, description, start_time, end_time, banner, image, phone_number, id]);
+
+        // Checking the affected rows
+        if (result.affectedRows === 0) {
+            // No rows were updated (restaurant not found or no changes)
+            return res.status(404).json({
+                error: "Restaurant not found",
+                message: "No restaurant found with the given ID or no changes were made."
+            });
+        }
+
+        // Successful update
+        res.status(200).json({
+            message: "Restaurant updated successfully"
+        });
+
+    } catch (error) {
+        // Handle unexpected errors
+        next(error);
+    }
+});
+
+
+
+
 export default RestaurantRouter;

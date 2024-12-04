@@ -139,4 +139,21 @@ UserRouter.get("/all_restaurants", async (req, res, next) => {
 
     res.status(200).json(restaurants);
 });
+
+UserRouter.get("/restaurant/:id", async (req, res, next) => {
+   const query = `select t.table_id, t.booking_status as status, t.description, t.image
+                  from restaurant_tables as t
+                  where restaurant_id = ?`;
+
+   const id = req.query.id;
+
+    const [table] = await db.query(query, [id]);
+
+    if (!table) {
+        return res.status(404).json({message: "No tables found"});
+    }
+
+    res.status(200).json(table);
+});
+
 export default UserRouter;

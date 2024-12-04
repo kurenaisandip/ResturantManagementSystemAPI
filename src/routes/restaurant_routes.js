@@ -19,7 +19,7 @@ RestaurantRouter.post("/signup", async (req, res, next) => {
 
     console.log(name, email, phone_number, password);
 
-    const result = await db.query('INSERT INTO restaurants_users  (restaurant_name , email, password, phone_number, role_id) VALUES (?, ?, ?,?, ?)', [name, email, hashedPassword,phone_number, 3]);
+    const result = await db.query('INSERT INTO restaurants_users  (restaurant_name , email, password, phone_number, role_id) VALUES (?, ?, ?,?, ?)', [name, email, hashedPassword, phone_number, 3]);
 
     console.log(result);
 
@@ -137,6 +137,34 @@ RestaurantRouter.put("/update/:id", async (req, res, next) => {
     }
 });
 
+/**
+ * @param {string} menu_name
+ * @param {decimal} price
+ * @param {string} description
+ * @param {string} image
+ * @param {int} restaurant_id
+ * @returns {*}
+ */
+
+RestaurantRouter.post("/add_menu", async (req, res, next) => {
+    try {
+        const {menu_name, price,description, image, restaurant_id} = req.body;
+
+        console.log(menu_name, price, description, image, restaurant_id);
+
+
+       const result = await db.query('INSERT INTO menus (menu_name, price, description, image, restaurant_id) VALUES (?, ?, ?, ?, ?)', [menu_name, price, description, image, restaurant_id]);
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({message: "Restaurant couldn't be created."});
+        }
+
+        res.status(200).json({restaurant_id: result[0].insertId});
+
+    } catch (error) {
+        next(error);
+    }
+});
 
 
 

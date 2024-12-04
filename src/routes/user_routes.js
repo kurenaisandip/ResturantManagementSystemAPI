@@ -96,4 +96,47 @@ UserRouter.post("/login", async (req, res, next) => {
 
 
 });
+
+UserRouter.get("/all_restaurants", async (req, res, next) => {
+    const query = `SELECT r.restaurant_id                        AS id,
+                          r.restaurant_name                      AS name,
+                          r.address,
+                          COUNT(t.table_id)                      AS tables,
+                          -- Merging start_time and end_time into a single column
+                          CONCAT(
+                                  CONCAT(
+                                          CASE
+                                              WHEN HOUR (r.start_time) > 12 THEN CONCAT(HOUR(r.start_time) - 12, ':', LPAD(MINUTE(r.start_time), 2, '0'), ' PM')
+                        WHEN HOUR(r.start_time) = 0 THEN CONCAT(12, ':', LPAD(MINUTE(r.start_time), 2, '0'), ' AM')
+                        ELSE CONCAT(HOUR(r.start_time), ':', LPAD(MINUTE(r.start_time), 2, '0'), ' AM')
+                        END,
+                    ' - '
+            ),
+                                  CASE
+                                      WHEN HOUR (r.end_time) > 12 THEN CONCAT(HOUR(r.end_time) - 12, ':', LPAD(MINUTE(r.end_time), 2, '0'), ' PM')
+                WHEN HOUR(r.end_time) = 0 THEN CONCAT(12, ':', LPAD(MINUTE(r.end_time), 2, '0'), ' AM')
+                ELSE CONCAT(HOUR(r.end_time), ':', LPAD(MINUTE(r.end_time), 2, '0'), ' AM')
+                END
+    ) AS time,
+                          r.description
+                   FROM restaurants_users AS r
+                            JOIN restaurant_tables AS t
+                                 ON r.restaurant_id = t.restaurant_id
+                   GROUP BY r.restaurant_id,
+                            r.restaurant_name,
+                            r.address,
+                            r.start_time,
+                            r.end_time,
+                            r.description
+                   ORDER BY r.restaurant_id;
+    `;
+
+    const [restaurants] = await db.query(query);
+
+    if (!restaurants) {
+        return res.status(404).json({message: "No restaurants found"});
+    }
+
+    res.status(200).json(restaurants);
+});
 export default UserRouter;

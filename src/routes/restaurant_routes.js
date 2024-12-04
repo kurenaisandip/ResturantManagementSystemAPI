@@ -166,6 +166,20 @@ RestaurantRouter.post("/add_menu", async (req, res, next) => {
     }
 });
 
+RestaurantRouter.post("/add_table", async  (req, res, next) => {
+  const {restaurant_id, table_name, booking_status, description, image, price, table_size } = req.body;
+
+  console.log(restaurant_id, table_name, booking_status, description, image, price, table_size);
+  const result = await db.query('INSERT INTO restaurant_tables (restaurant_id, table_name, booking_status, description, image, price, table_size) VALUES (?, ?, ?, ?, ?, ?, ?)', [restaurant_id, table_name, booking_status, description, image, price, table_size]);
+
+  if (result.affectedRows === 0) {
+    return res.status(404).json({message: "Table couldn't be created."});
+  }
+
+  res.status(200).json({table_id: result[0].insertId});
+
+});
+
 
 
 export default RestaurantRouter;

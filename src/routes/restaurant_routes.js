@@ -89,6 +89,21 @@ RestaurantRouter.post("/login", async (req, res, next) => {
     res.status(200).json(token);
 });
 
+    RestaurantRouter.get("/getProfile/:id", async (req, res, next) => {
+    try{
+        const id = req.params.id;
+        const [restaurant] = await db.query('SELECT * FROM restaurants_users WHERE restaurant_id = ?', [id]);
+
+        if (!restaurant) {
+            return res.status(404).json({message: "Restaurant not found"});
+        }
+
+        res.status(200).json(restaurant[0]);
+    }catch (e) {
+        console.log(e);
+    }
+});
+
 RestaurantRouter.put("/update/:id", async (req, res, next) => {
     const id = req.params.id;
     const {restaurant_name, email, phone_number, address, description, start_time, end_time, banner, image} = req.body;

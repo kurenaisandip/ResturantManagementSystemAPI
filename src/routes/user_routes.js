@@ -156,4 +156,22 @@ UserRouter.get("/restaurant/:id", async (req, res, next) => {
     res.status(200).json(table);
 });
 
+UserRouter.get("/restaurant/table/book/:id", async (req, res, next) => {
+
+    const id = req.query.id;
+
+    const query = `insert into bookings (table_id, user_id, status, booking_date, start_time, end_time ) values (?, ?, ?, ?, ?)`;
+
+    const result = await db.query(query, [id]);
+
+    if (result[0].affectedRows === 0) {
+        return res.status(404).json({message: "Something went wrong"});
+    }
+
+    res.status(201).json({id: result[0].insertId});
+
+});
+
+
+
 export default UserRouter;

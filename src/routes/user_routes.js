@@ -141,7 +141,7 @@ UserRouter.get("/all_restaurants", async (req, res, next) => {
 });
 
 UserRouter.get("/restaurant/:id", async (req, res, next) => {
-   const query = `select t.table_id, t.booking_status as status, t.description, t.image
+   const query = `select   t.booking_status as status, t.description, t.image, t.table_id, t.table_name
                   from restaurant_tables as t
                   where restaurant_id = ?`;
 

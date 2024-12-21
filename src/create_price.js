@@ -1,5 +1,5 @@
 ﻿import Stripe from 'stripe'; // ES6 import
-const stripe = new Stripe('sk_test_51NEaTAByqae66O7NwklX2PO1fsJOrYIP1VjKogAIUeoT9ghXqHYrRd9qjE4uamChzQPlu3oSi19GgZxc32uScTAC00v9hPMj94'); // Initialize Stripe
+const stripe = new Stripe(process.env.stripe_secret_key); // Initialize Stripe
 
 (async () => {
     try {

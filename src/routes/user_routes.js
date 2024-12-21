@@ -93,8 +93,6 @@ UserRouter.post("/login", async (req, res, next) => {
     const token = generateAccessToken(userData[0].username, userData[0].email, userData[0].id, userData[0].role);
 
     res.status(200).json(token);
-
-
 });
 
 UserRouter.get("/all_restaurants", async (req, res, next) => {
